@@ -13,16 +13,14 @@
 #define segment_f GPIOD, GPIO_PIN_5
 #define segment_g GPIOD, GPIO_PIN_6
 
-#define tlacitko GPIOA, GPIO_PIN_6
+#define button GPIOA, GPIO_PIN_6
+
+#define crossing_lights_green GPIOB, GPIO_PIN_7
+#define crossing_lights_red GPIOB, GPIO_PIN_6
 
 void init(void)
 {
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);      // taktovani MCU na 16MHz
-
-    GPIO_Init(LED_PORT, LED_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
-    GPIO_Init(BTN_PORT, BTN_PIN, GPIO_MODE_IN_FL_NO_IT);
-    GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_SLOW);
-    GPIO_Init(GPIOB,GPIO_PIN_2,GPIO_MODE_IN_PU_NO_IT);
 
     // 7 segment
 
@@ -36,7 +34,14 @@ void init(void)
 
     // tlačítko
 
-    GPIO_Init(tlacitko, GPIO_MODE_IN_PU_NO_IT);
+    GPIO_Init(button, GPIO_MODE_IN_PU_NO_IT);
+
+    // LED semaforu přechodu
+
+    GPIO_Init(crossing_lights_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(crossing_lights_red, GPIO_MODE_OUT_PP_LOW_SLOW);
+
+    // povolení milis()
 
     init_milis();
 }
@@ -102,6 +107,8 @@ void show_number(uint8_t number) {
 }
 
 void crossing_activated(void) {
+    HIGH(crossing_lights_red);
+    LOW(crossing_lights_green);
     uint8_t crossing_time_number = 8; // může se zde upravit
     uint32_t time = 0;
     while (crossing_time_number > 0) {
@@ -115,6 +122,8 @@ void crossing_activated(void) {
         }
     }
     show_number(numbers[10]); // zhasnutí 7segmentovky
+    LOW(crossing_lights_red);
+    HIGH(crossing_lights_green);
 }
 
 
@@ -123,12 +132,20 @@ int main(void)
     init();
 
     uint32_t time = 0;
+    bool stisk = 0;
 
     while(1) {
-        if(milis() - time > 500) {
+        if(milis() - time > 100) {
             time = milis();
-            crossing_activated();
-            delay_ms(5000);
+            if(PUSH(button)) {
+                stisk = 1;
+            }
+            else {
+                if(stisk == 1) {
+                    crossing_activated();
+                    stisk = 0;
+                }
+            }
         }
     }
 }
