@@ -18,12 +18,32 @@
 #define crossing_lights_green GPIOB, GPIO_PIN_7
 #define crossing_lights_red GPIOB, GPIO_PIN_6
 
+#define A_straight_green GPIOB, GPIO_PIN_0
+#define A_straight_orange GPIOB, GPIO_PIN_1
+#define A_straight_red GPIOB, GPIO_PIN_2
+#define A_right_green GPIOB, GPIO_PIN_3
+#define A_right_orange GPIOB, GPIO_PIN_4
+#define A_right_red GPIOB, GPIO_PIN_5
+
+#define B_left_green GPIOE, GPIO_PIN_2
+#define B_left_orange GPIOE, GPIO_PIN_1
+#define B_left_red GPIOD, GPIO_PIN_7
+#define B_right_green GPIOE, GPIO_PIN_5
+#define B_right_orange GPIOC, GPIO_PIN_6
+#define B_right_red GPIOC, GPIO_PIN_7
+
+#define C_left_green GPIOF, GPIO_PIN_5
+#define C_left_orange GPIOF, GPIO_PIN_6
+#define C_left_red GPIOF, GPIO_PIN_7
+#define C_straight_green GPIOF, GPIO_PIN_0
+#define C_straight_orange GPIOF, GPIO_PIN_3
+#define C_straight_red GPIOF, GPIO_PIN_4
+
 void init(void)
 {
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);      // taktovani MCU na 16MHz
 
     // 7 segment
-
     GPIO_Init(segment_a, GPIO_MODE_OUT_PP_HIGH_SLOW);
     GPIO_Init(segment_b, GPIO_MODE_OUT_PP_HIGH_SLOW);
     GPIO_Init(segment_c, GPIO_MODE_OUT_PP_HIGH_SLOW);
@@ -33,17 +53,45 @@ void init(void)
     GPIO_Init(segment_g, GPIO_MODE_OUT_PP_HIGH_SLOW);
 
     // tlačítko
-
     GPIO_Init(button, GPIO_MODE_IN_PU_NO_IT);
 
     // LED semaforu přechodu
-
     GPIO_Init(crossing_lights_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
     GPIO_Init(crossing_lights_red, GPIO_MODE_OUT_PP_LOW_SLOW);
 
-    // povolení milis()
+    // směr křižovatky A
+    GPIO_Init(A_straight_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_straight_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_straight_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_right_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_right_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_right_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
 
+    // směr křižovatky B
+    GPIO_Init(B_left_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_left_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_left_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_right_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_right_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_right_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+
+    // směr křižovatky C
+    GPIO_Init(C_left_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_left_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_left_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_straight_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_straight_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_straight_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+
+    // povolení milis()
     init_milis();
+}
+
+const uint8_t mode_1[]  =
+{
+    B_right_red,
+    B_left_red,
+    
 }
 
 const uint8_t numbers[] =
@@ -126,6 +174,12 @@ void crossing_activated(void) {
     HIGH(crossing_lights_green);
 }
 
+void traffic_lights_startup()
+
+void crossroad_mode_1(void) {
+    traffic_lights_startup();
+}
+
 
 int main(void)
 {
@@ -133,6 +187,8 @@ int main(void)
 
     uint32_t time = 0;
     bool stisk = 0;
+    uint8_t crossroad_mode = 1;
+    uint32_t crossroad_mode_time = 0;
 
     while(1) {
         if(milis() - time > 100) {
@@ -145,6 +201,9 @@ int main(void)
                     crossing_activated();
                     stisk = 0;
                 }
+            }
+            if(crossroad_mode == 1) {
+                crossroad_mode_1();
             }
         }
     }
