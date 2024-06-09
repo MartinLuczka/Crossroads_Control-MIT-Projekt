@@ -5,6 +5,8 @@
 #include "milis.h"
 #include "delay.h"
 
+// makra rozdělit na porty a piny (abychom mohli posílat do funkcí, psát to řádek po řádku je MOR, hnus), tím pádem se bude měnit i ty makra v main.h, jak na to ve stažených souborech
+
 #define segment_a GPIOE, GPIO_PIN_0
 #define segment_b GPIOC, GPIO_PIN_1
 #define segment_c GPIOC, GPIO_PIN_3
@@ -87,13 +89,6 @@ void init(void)
     init_milis();
 }
 
-const uint8_t mode_1[]  =
-{
-    B_right_red,
-    B_left_red,
-    
-}
-
 const uint8_t numbers[] =
 {
     0b11000000, // číslo 0
@@ -174,13 +169,6 @@ void crossing_activated(void) {
     HIGH(crossing_lights_green);
 }
 
-void traffic_lights_startup()
-
-void crossroad_mode_1(void) {
-    traffic_lights_startup();
-}
-
-
 int main(void)
 {
     init();
@@ -203,7 +191,30 @@ int main(void)
                 }
             }
             if(crossroad_mode == 1) {
-                crossroad_mode_1();
+                LOW(B_right_red); // rožnutí červené barvy
+                LOW(B_left_red); 
+                LOW(A_right_red); 
+                if(milis() - crossroad_mode_time > 2000) {
+                    HIGH(B_right_red); // zhasnutí červené barvy
+                    HIGH(B_left_red); 
+                    HIGH(A_right_red);
+                    HIGH(B_right_orange); // zhasnutí oranžové barvy
+                    HIGH(B_left_orange); 
+                    HIGH(A_right_orange);
+                    LOW(B_right_green); // rožnutí zelené barvy
+                    LOW(B_left_green); 
+                    LOW(A_right_green);
+                    crossroad_mode_time = milis();
+                    crossroad_mode = 2;
+                }
+                else if(milis() - crossroad_mode_time > 1000) {
+                    HIGH(B_right_red); // zhasnutí červené barvy
+                    HIGH(B_left_red); 
+                    HIGH(A_right_red);
+                    LOW(B_right_orange); // rožnutí oranžové barvy
+                    LOW(B_left_orange); 
+                    LOW(A_right_orange);
+                }
             }
         }
     }
