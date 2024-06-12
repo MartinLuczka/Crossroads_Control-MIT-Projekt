@@ -1,12 +1,12 @@
 #ifndef _MAIN_H_
 #define _MAIN_H_ 1
 
-#define LOW(BAGR) GPIO_WriteLow(BAGR)
-#define HIGH(BAGR) GPIO_WriteHigh(BAGR)
-#define REVERSE(BAGR) GPIO_WriteReverse(BAGR)
+#define LOW(PORT, PIN) GPIO_WriteLow(PORT, PIN)
+#define HIGH(PORT, PIN) GPIO_WriteHigh(PORT, PIN)
+#define REVERSE(PORT, PIN) GPIO_WriteReverse(PORT, PIN)
 
-#define READ(BAGR) (GPIO_ReadInputPin(BAGR)!=RESET) 
-#define PUSH(BAGR) (GPIO_ReadInputPin(BAGR)==RESET) 
+#define READ(PORT, PIN) (GPIO_ReadInputPin(PORT, PIN)!=RESET) 
+#define PUSH(PORT, PIN) (GPIO_ReadInputPin(PORT, PIN)==RESET) 
 
 // Discovery Board
 #ifdef STM8S003

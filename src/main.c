@@ -7,87 +7,262 @@
 
 // makra rozdělit na porty a piny (abychom mohli posílat do funkcí, psát to řádek po řádku je MOR, hnus), tím pádem se bude měnit i ty makra v main.h, jak na to ve stažených souborech
 
-#define segment_a GPIOE, GPIO_PIN_0
-#define segment_b GPIOC, GPIO_PIN_1
-#define segment_c GPIOC, GPIO_PIN_3
-#define segment_d GPIOC, GPIO_PIN_2
-#define segment_e GPIOG, GPIO_PIN_0
-#define segment_f GPIOD, GPIO_PIN_5
-#define segment_g GPIOD, GPIO_PIN_6
+#define segment_a_PORT GPIOE
+#define segment_a_PIN  GPIO_PIN_0
 
-#define button GPIOA, GPIO_PIN_6
+#define segment_b_PORT GPIOC
+#define segment_b_PIN  GPIO_PIN_1
 
-#define crossing_lights_green GPIOB, GPIO_PIN_7
-#define crossing_lights_red GPIOB, GPIO_PIN_6
+#define segment_c_PORT GPIOC
+#define segment_c_PIN  GPIO_PIN_3
 
-#define A_straight_green GPIOB, GPIO_PIN_0
-#define A_straight_orange GPIOB, GPIO_PIN_1
-#define A_straight_red GPIOB, GPIO_PIN_2
-#define A_right_green GPIOB, GPIO_PIN_3
-#define A_right_orange GPIOB, GPIO_PIN_4
-#define A_right_red GPIOB, GPIO_PIN_5
+#define segment_d_PORT GPIOC
+#define segment_d_PIN  GPIO_PIN_2
 
-#define B_left_green GPIOE, GPIO_PIN_2
-#define B_left_orange GPIOE, GPIO_PIN_1
-#define B_left_red GPIOD, GPIO_PIN_7
-#define B_right_green GPIOE, GPIO_PIN_5
-#define B_right_orange GPIOC, GPIO_PIN_6
-#define B_right_red GPIOC, GPIO_PIN_7
+#define segment_e_PORT GPIOG
+#define segment_e_PIN  GPIO_PIN_0
 
-#define C_left_green GPIOF, GPIO_PIN_5
-#define C_left_orange GPIOF, GPIO_PIN_6
-#define C_left_red GPIOF, GPIO_PIN_7
-#define C_straight_green GPIOF, GPIO_PIN_0
-#define C_straight_orange GPIOF, GPIO_PIN_3
-#define C_straight_red GPIOF, GPIO_PIN_4
+#define segment_f_PORT GPIOD
+#define segment_f_PIN  GPIO_PIN_5
+
+#define segment_g_PORT GPIOD
+#define segment_g_PIN  GPIO_PIN_6
+
+#define button_PORT GPIOA
+#define button_PIN  GPIO_PIN_6
+
+#define speaker_PORT GPIOG
+#define speaker_PIN GPIO_PIN_6
+
+#define crossing_lights_green_PORT GPIOB
+#define crossing_lights_green_PIN  GPIO_PIN_7
+
+#define crossing_lights_red_PORT GPIOB
+#define crossing_lights_red_PIN  GPIO_PIN_6
+
+#define A_straight_green_PORT GPIOB
+#define A_straight_green_PIN  GPIO_PIN_0
+
+#define A_straight_orange_PORT GPIOB
+#define A_straight_orange_PIN  GPIO_PIN_1
+
+#define A_straight_red_PORT GPIOB
+#define A_straight_red_PIN  GPIO_PIN_2
+
+#define A_right_green_PORT GPIOB
+#define A_right_green_PIN  GPIO_PIN_3
+
+#define A_right_orange_PORT GPIOB
+#define A_right_orange_PIN  GPIO_PIN_4
+
+#define A_right_red_PORT GPIOB
+#define A_right_red_PIN  GPIO_PIN_5
+
+#define B_left_green_PORT GPIOE
+#define B_left_green_PIN  GPIO_PIN_2
+
+#define B_left_orange_PORT GPIOE
+#define B_left_orange_PIN  GPIO_PIN_1
+
+#define B_left_red_PORT GPIOD
+#define B_left_red_PIN  GPIO_PIN_7
+
+#define B_right_green_PORT GPIOE
+#define B_right_green_PIN  GPIO_PIN_5
+
+#define B_right_orange_PORT GPIOC
+#define B_right_orange_PIN  GPIO_PIN_6
+
+#define B_right_red_PORT GPIOC
+#define B_right_red_PIN  GPIO_PIN_7
+
+#define C_left_green_PORT GPIOF
+#define C_left_green_PIN  GPIO_PIN_5
+
+#define C_left_orange_PORT GPIOF
+#define C_left_orange_PIN  GPIO_PIN_6
+
+#define C_left_red_PORT GPIOF
+#define C_left_red_PIN  GPIO_PIN_7
+
+#define C_straight_green_PORT GPIOF
+#define C_straight_green_PIN  GPIO_PIN_0
+
+#define C_straight_orange_PORT GPIOF
+#define C_straight_orange_PIN  GPIO_PIN_3
+
+#define C_straight_red_PORT GPIOF
+#define C_straight_red_PIN  GPIO_PIN_4
 
 void init(void)
 {
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);      // taktovani MCU na 16MHz
 
     // 7 segment
-    GPIO_Init(segment_a, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(segment_b, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(segment_c, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(segment_d, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(segment_e, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(segment_f, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(segment_g, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_a_PORT, segment_a_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_b_PORT, segment_b_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_c_PORT, segment_c_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_d_PORT, segment_d_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_e_PORT, segment_e_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_f_PORT, segment_f_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(segment_g_PORT, segment_g_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+
+    // reproduktor
+
+    GPIO_Init(speaker_PORT, speaker_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
 
     // tlačítko
-    GPIO_Init(button, GPIO_MODE_IN_PU_NO_IT);
+    GPIO_Init(button_PORT, button_PIN, GPIO_MODE_IN_PU_NO_IT);
 
     // LED semaforu přechodu
-    GPIO_Init(crossing_lights_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(crossing_lights_red, GPIO_MODE_OUT_PP_LOW_SLOW);
+    GPIO_Init(crossing_lights_green_PORT, crossing_lights_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(crossing_lights_red_PORT, crossing_lights_red_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
 
     // směr křižovatky A
-    GPIO_Init(A_straight_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(A_straight_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(A_straight_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(A_right_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(A_right_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(A_right_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_straight_red_PORT, A_straight_red_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_straight_orange_PORT, A_straight_orange_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_straight_green_PORT, A_straight_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_right_red_PORT, A_right_red_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_right_orange_PORT, A_right_orange_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(A_right_green_PORT, A_right_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+
 
     // směr křižovatky B
-    GPIO_Init(B_left_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(B_left_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(B_left_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(B_right_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(B_right_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(B_right_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_left_red_PORT, B_left_red_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_left_orange_PORT, B_left_orange_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_left_green_PORT, B_left_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_right_red_PORT, B_right_red_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_right_orange_PORT, B_right_orange_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(B_right_green_PORT, B_right_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
 
     // směr křižovatky C
-    GPIO_Init(C_left_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(C_left_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(C_left_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(C_straight_red, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(C_straight_orange, GPIO_MODE_OUT_PP_HIGH_SLOW);
-    GPIO_Init(C_straight_green, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_left_red_PORT, C_left_red_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_left_orange_PORT, C_left_orange_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_left_green_PORT, C_left_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_straight_red_PORT, C_straight_red_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_straight_orange_PORT, C_straight_orange_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
+    GPIO_Init(C_straight_green_PORT, C_straight_green_PIN, GPIO_MODE_OUT_PP_HIGH_SLOW);
 
     // povolení milis()
     init_milis();
 }
+
+// Pole pro porty
+const GPIO_TypeDef* all_ports[] = {
+    A_straight_red_PORT,
+    A_straight_orange_PORT,
+    A_straight_green_PORT,
+    A_right_red_PORT,
+    A_right_orange_PORT,
+    A_right_green_PORT,
+    B_left_red_PORT,
+    B_left_orange_PORT,
+    B_left_green_PORT,
+    B_right_red_PORT,
+    B_right_orange_PORT,
+    B_right_green_PORT,
+    C_left_red_PORT,
+    C_left_orange_PORT,
+    C_left_green_PORT,
+    C_straight_red_PORT,
+    C_straight_orange_PORT,
+    C_straight_green_PORT
+};
+
+// Pole pro piny
+const uint16_t all_pins[] = {
+    A_straight_red_PIN,
+    A_straight_orange_PIN,
+    A_straight_green_PIN,
+    A_right_red_PIN,
+    A_right_orange_PIN,
+    A_right_green_PIN,
+    B_left_red_PIN,
+    B_left_orange_PIN,
+    B_left_green_PIN,
+    B_right_red_PIN,
+    B_right_orange_PIN,
+    B_right_green_PIN,
+    C_left_red_PIN,
+    C_left_orange_PIN,
+    C_left_green_PIN,
+    C_straight_red_PIN,
+    C_straight_orange_PIN,
+    C_straight_green_PIN
+};
+
+
+const GPIO_TypeDef* mode_1_PORT[] = {
+    B_right_red_PORT,
+    B_left_red_PORT,
+    A_right_red_PORT,
+    B_right_orange_PORT,
+    B_left_orange_PORT,
+    A_right_orange_PORT,
+    B_right_green_PORT,
+    B_left_green_PORT,
+    A_right_green_PORT,
+};
+
+const uint8_t mode_1_PIN[] = {
+    B_right_red_PIN,
+    B_left_red_PIN,
+    A_right_red_PIN,
+    B_right_orange_PIN,
+    B_left_orange_PIN,
+    A_right_orange_PIN,
+    B_right_green_PIN,
+    B_left_green_PIN,
+    A_right_green_PIN,
+};
+
+const GPIO_TypeDef* mode_2_PORT[] = {
+    A_straight_red_PORT,
+    A_right_red_PORT,
+    C_straight_red_PORT,
+    A_straight_orange_PORT,
+    A_right_orange_PORT,
+    C_straight_orange_PORT,
+    A_straight_green_PORT,
+    A_right_green_PORT,
+    C_straight_green_PORT,
+};
+
+const uint8_t mode_2_PIN[] = {
+    A_straight_red_PIN,
+    A_right_red_PIN,
+    C_straight_red_PIN,
+    A_straight_orange_PIN,
+    A_right_orange_PIN,
+    C_straight_orange_PIN,
+    A_straight_green_PIN,
+    A_right_green_PIN,
+    C_straight_green_PIN,
+};
+
+const GPIO_TypeDef* mode_3_PORT[] = {
+    C_straight_red_PORT,
+    C_left_red_PORT,
+    B_right_red_PORT,
+    C_straight_orange_PORT,
+    C_left_orange_PORT,
+    B_right_orange_PORT,
+    C_straight_green_PORT,
+    C_left_green_PORT,
+    B_right_green_PORT,
+};
+
+const GPIO_TypeDef* mode_3_PIN[] = {
+    C_straight_red_PIN,
+    C_left_red_PIN,
+    B_right_red_PIN,
+    C_straight_orange_PIN,
+    C_left_orange_PIN,
+    B_right_orange_PIN,
+    C_straight_green_PIN,
+    C_left_green_PIN,
+    B_right_green_PIN,
+};
 
 const uint8_t numbers[] =
 {
@@ -106,52 +281,52 @@ const uint8_t numbers[] =
 
 void show_number(uint8_t number) {
     if (number & 1<<0) {
-        HIGH(segment_a);
+        HIGH(segment_a_PORT, segment_a_PIN);
     }
     else {
-        LOW(segment_a);
+        LOW(segment_a_PORT, segment_a_PIN);
     }
     if (number & 1<<1) {
-        HIGH(segment_b);
+        HIGH(segment_b_PORT, segment_b_PIN);
     }
     else {
-        LOW(segment_b);
+        LOW(segment_b_PORT, segment_b_PIN);
     }
     if (number & 1<<2) {
-        HIGH(segment_c);
+        HIGH(segment_c_PORT, segment_c_PIN);
     }
     else {
-        LOW(segment_c);
+        LOW(segment_c_PORT, segment_c_PIN);
     }
     if (number & 1<<3) {
-        HIGH(segment_d);
+        HIGH(segment_d_PORT, segment_d_PIN);
     }
     else {
-        LOW(segment_d);
+        LOW(segment_d_PORT, segment_d_PIN);
     }
     if (number & 1<<4) {
-        HIGH(segment_e);
+        HIGH(segment_e_PORT, segment_e_PIN);
     }
     else {
-        LOW(segment_e);
+        LOW(segment_e_PORT, segment_e_PIN);
     }
     if (number & 1<<5) {
-        HIGH(segment_f);
+        HIGH(segment_f_PORT, segment_f_PIN);
     }
     else {
-        LOW(segment_f);
+        LOW(segment_f_PORT, segment_f_PIN);
     }
     if (number & 1<<6) {
-        HIGH(segment_g);
+        HIGH(segment_g_PORT, segment_g_PIN);
     }
     else {
-        LOW(segment_g);
+        LOW(segment_g_PORT, segment_g_PIN);
     }
 }
 
 void crossing_activated(void) {
-    HIGH(crossing_lights_red);
-    LOW(crossing_lights_green);
+    HIGH(crossing_lights_red_PORT, crossing_lights_red_PIN);
+    LOW(crossing_lights_green_PORT, crossing_lights_green_PIN);
     uint8_t crossing_time_number = 8; // může se zde upravit
     uint32_t time = 0;
     while (crossing_time_number > 0) {
@@ -165,60 +340,68 @@ void crossing_activated(void) {
         }
     }
     show_number(numbers[10]); // zhasnutí 7segmentovky
-    LOW(crossing_lights_red);
-    HIGH(crossing_lights_green);
+    LOW(crossing_lights_red_PORT, crossing_lights_red_PIN);
+    HIGH(crossing_lights_green_PORT, crossing_lights_green_PIN);
 }
 
-int main(void)
-{
+void turn_on(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3) {
+    LOW(port1, pin1);
+    LOW(port2, pin2);
+    LOW(port3, pin3);
+}
+
+void turn_off(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3) {
+    HIGH(port1, pin1);
+    HIGH(port2, pin2);
+    HIGH(port3, pin3);
+}
+
+int main(void) {
     init();
 
     uint32_t time = 0;
     bool stisk = 0;
     uint8_t crossroad_mode = 1;
     uint32_t crossroad_mode_time = 0;
+    bool crossing_request = 0;
+    uint32_t sound_time = 0;
+    bool sound_on = 0;
+    uint32_t switching_sound_time = 0;
 
-    while(1) {
-        if(milis() - time > 100) {
-            time = milis();
-            if(PUSH(button)) {
-                stisk = 1;
+    while (1) {
+        if(milis() - switching_sound_time > 667) {
+            if(sound_on == 0) {
+                sound_on = 1;
             }
-            else {
-                if(stisk == 1) {
-                    crossing_activated();
+            else{
+                sound_on = 0;
+            }
+            switching_sound_time = milis();
+        }
+        if((milis() - sound_time > 1) & sound_on) {
+                sound_time = milis();
+                REVERSE(speaker_PORT, speaker_PIN);
+            }
+        if (milis() - time > 100) {
+            time = milis();
+            if (PUSH(button_PORT, button_PIN)) {
+                stisk = 1;
+            } else {
+                if (stisk == 1) {
+                    crossing_request = 1;
                     stisk = 0;
                 }
             }
-            if(crossroad_mode == 1) {
-                LOW(B_right_red); // rožnutí červené barvy
-                LOW(B_left_red); 
-                LOW(A_right_red); 
-                if(milis() - crossroad_mode_time > 2000) {
-                    HIGH(B_right_red); // zhasnutí červené barvy
-                    HIGH(B_left_red); 
-                    HIGH(A_right_red);
-                    HIGH(B_right_orange); // zhasnutí oranžové barvy
-                    HIGH(B_left_orange); 
-                    HIGH(A_right_orange);
-                    LOW(B_right_green); // rožnutí zelené barvy
-                    LOW(B_left_green); 
-                    LOW(A_right_green);
-                    crossroad_mode_time = milis();
-                    crossroad_mode = 2;
-                }
-                else if(milis() - crossroad_mode_time > 1000) {
-                    HIGH(B_right_red); // zhasnutí červené barvy
-                    HIGH(B_left_red); 
-                    HIGH(A_right_red);
-                    LOW(B_right_orange); // rožnutí oranžové barvy
-                    LOW(B_left_orange); 
-                    LOW(A_right_orange);
+            if (crossroad_mode == 1) {
+                if(crossing_request == 1) {
+                    crossing_activated();
+                    crossing_request = 0;
                 }
             }
         }
     }
 }
+
 
 /*-------------------------------  Assert -----------------------------------*/
 #include "__assert__.h"
