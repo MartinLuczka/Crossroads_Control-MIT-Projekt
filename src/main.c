@@ -191,6 +191,26 @@ const uint16_t all_pins[] = {
     C_straight_green_PIN
 };
 
+// Pole pro porty všech červených
+const GPIO_TypeDef* all_red_ports[] = {
+    A_straight_red_PORT,
+    A_right_red_PORT,
+    B_left_red_PORT,
+    B_right_red_PORT,
+    C_left_red_PORT,
+    C_straight_red_PORT,
+};
+
+// Pole pro piny všech červených
+const uint16_t all_red_pins[] = {
+    A_straight_red_PIN,
+    A_right_red_PIN,
+    B_left_red_PIN,
+    B_right_red_PIN,
+    C_left_red_PIN,
+    C_straight_red_PIN,
+};
+
 
 const GPIO_TypeDef* mode_1_PORT[] = {
     B_right_red_PORT,
@@ -264,6 +284,20 @@ const GPIO_TypeDef* mode_3_PIN[] = {
     B_right_green_PIN,
 };
 
+const GPIO_TypeDef* crossing_mode_PORT[] = {
+    A_straight_orange_PORT,
+    C_straight_orange_PORT,
+    A_straight_green_PORT,
+    C_straight_green_PORT,
+};
+
+const GPIO_TypeDef* crossing_mode_PIN[] = {
+    A_straight_orange_PIN,
+    C_straight_orange_PIN,
+    A_straight_green_PIN,
+    C_straight_green_PIN,
+};
+
 const uint8_t numbers[] =
 {
     0b11000000, // číslo 0
@@ -329,6 +363,10 @@ void crossing_activated(void) {
     LOW(crossing_lights_green_PORT, crossing_lights_green_PIN);
     uint8_t crossing_time_number = 8; // může se zde upravit
     uint32_t time = 0;
+    uint32_t crossing_sound_time = 0;
+    uint32_t crossing_sound_on = 0;
+    uint32_t sound_time = 0;
+
     while (crossing_time_number > 0) {
         if(milis() - time > 1000) {
             time = milis();
@@ -338,6 +376,19 @@ void crossing_activated(void) {
             }
             crossing_time_number -= 1;
         }
+        if(milis() - crossing_sound_time > 125) {
+            if(crossing_sound_on == 0) {
+                crossing_sound_on = 1;
+            }
+            else{
+                crossing_sound_on = 0;
+            }
+            crossing_sound_time = milis();
+        }
+        if((milis() - sound_time > 1) & crossing_sound_on) {
+                sound_time = milis();
+                REVERSE(speaker_PORT, speaker_PIN);
+            }
     }
     show_number(numbers[10]); // zhasnutí 7segmentovky
     LOW(crossing_lights_red_PORT, crossing_lights_red_PIN);
@@ -367,6 +418,11 @@ int main(void) {
     uint32_t sound_time = 0;
     bool sound_on = 0;
     uint32_t switching_sound_time = 0;
+    
+    for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
+        LOW(all_red_ports[i], all_red_pins[i]);
+    }
+    
 
     while (1) {
         if(milis() - switching_sound_time > 667) {
