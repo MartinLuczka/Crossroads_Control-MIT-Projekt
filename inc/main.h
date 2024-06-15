@@ -40,8 +40,9 @@
 void init(void);
 void show_number(uint8_t number);
 void crossing_activated(void);
-void wait_for_any_seconds(int16_t waiting_seconds);
+void wait_for_any_miliseconds(int16_t waiting_miliseconds);
 void turn_on(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3);
 void turn_off(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3);
+void reverse(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3);
 
 #endif // !_MAIN_H_

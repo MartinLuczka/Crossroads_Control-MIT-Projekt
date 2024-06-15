@@ -377,7 +377,7 @@ void crossing_activated(void) {
     // vypnutí a zapnutí oranžové
     LOW(crossing_mode_PORT[0], crossing_mode_PIN[0]);
     LOW(crossing_mode_PORT[1], crossing_mode_PIN[1]);
-    wait_for_any_seconds(1);
+    wait_for_any_miliseconds(1000);
     HIGH(crossing_mode_PORT[0], crossing_mode_PIN[0]);
     HIGH(crossing_mode_PORT[1], crossing_mode_PIN[1]);
     LOW(crossing_mode_PORT[2], crossing_mode_PIN[2]);
@@ -391,7 +391,7 @@ void crossing_activated(void) {
             time = milis();
             show_number(numbers[crossing_time_number]);
             if (crossing_time_number == 1) {
-                wait_for_any_seconds(1);
+                wait_for_any_miliseconds(1000);
             }
             crossing_time_number -= 1;
         }
@@ -416,7 +416,7 @@ void crossing_activated(void) {
     // zapnutí a vypnutí oranžové
     LOW(crossing_mode_PORT[0], crossing_mode_PIN[0]);
     LOW(crossing_mode_PORT[1], crossing_mode_PIN[1]);
-    wait_for_any_seconds(1);
+    wait_for_any_miliseconds(1000);
     HIGH(crossing_mode_PORT[0], crossing_mode_PIN[0]);
     HIGH(crossing_mode_PORT[1], crossing_mode_PIN[1]);
     // nastavení všeho zpět na červenou
@@ -425,18 +425,17 @@ void crossing_activated(void) {
     }
     LOW(crossing_lights_red_PORT, crossing_lights_red_PIN);
     HIGH(crossing_lights_green_PORT, crossing_lights_green_PIN);
-    wait_for_any_seconds(2);
+    wait_for_any_miliseconds(2000);
 }
 
-void wait_for_any_seconds(int16_t waiting_seconds) {
-    int32_t mili_seconds = waiting_seconds * 1000;
+void wait_for_any_miliseconds(int16_t waiting_miliseconds) {
     int32_t time_now = milis();
     int32_t switching_sound_time = 0;
     bool sound_on = 0;
     int32_t sound_time = 0;
     bool stisk = 0;
     int32_t time = 0;
-    while(milis() < time_now + mili_seconds) {
+    while(milis() < time_now + waiting_miliseconds) {
         if(milis() - switching_sound_time > 667) {
             if(sound_on == 0) {
                 sound_on = 1;
@@ -477,6 +476,13 @@ void turn_off(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pi
     HIGH(port3, pin3);
 }
 
+// funkce pro převrácení stavu 3 LED diod zaráz
+void reverse(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3) {
+    REVERSE(port1, pin1);
+    REVERSE(port2, pin2);
+    REVERSE(port3, pin3);
+}
+
 // hlavní funkce main
 int main(void) {
     init();
@@ -492,6 +498,7 @@ int main(void) {
     for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
         LOW(all_red_ports[i], all_red_pins[i]);
     }
+    wait_for_any_miliseconds(2000);
     
     while (1) {
         if(milis() - switching_sound_time > 667) {
@@ -526,21 +533,113 @@ int main(void) {
                 turn_off(mode_1_PORT[0], mode_1_PIN[0], mode_1_PORT[1], mode_1_PIN[1], mode_1_PORT[2], mode_1_PIN[2]);
                 // rožnutí a zhasnutí oranžové
                 turn_on(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
-                wait_for_any_seconds(1);
+                wait_for_any_miliseconds(1000);
                 turn_off(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
                 // rožnutí zelených LED - VOLNO v daných směrech
                 turn_on(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
-                wait_for_any_seconds(8);
+                wait_for_any_miliseconds(6500);
+                // blikání LED před vypnutím
+                reverse(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_miliseconds(250);
                 turn_off(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
                 // rožnutí a zhasnutí oranžové
                 turn_on(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
-                wait_for_any_seconds(1);
+                wait_for_any_miliseconds(1000);
                 turn_off(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
                 // zpět na červenou pro všechny semafory
                 for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
                     LOW(all_red_ports[i], all_red_pins[i]);
                 }
-                wait_for_any_seconds(2);
+                wait_for_any_miliseconds(2000);
+                crossroad_mode = 2;
+            }
+            if(crossroad_mode == 2) {
+                if(crossing_request == 1) {
+                    crossing_activated();
+                    crossing_request = 0;
+                }
+                // zhasnutí červené na aktivních semaforech při tomto režimu
+                turn_off(mode_2_PORT[0], mode_2_PIN[0], mode_2_PORT[1], mode_2_PIN[1], mode_2_PORT[2], mode_2_PIN[2]);
+                // rožnutí a zhasnutí oranžové
+                turn_on(mode_2_PORT[3], mode_2_PIN[3], mode_2_PORT[4], mode_2_PIN[4], mode_2_PORT[5], mode_2_PIN[5]);
+                wait_for_any_miliseconds(1000);
+                turn_off(mode_2_PORT[3], mode_2_PIN[3], mode_2_PORT[4], mode_2_PIN[4], mode_2_PORT[5], mode_2_PIN[5]);
+                // rožnutí zelených LED - VOLNO v daných směrech
+                turn_on(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(6500);
+                // blikání LED před vypnutím
+                reverse(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                wait_for_any_miliseconds(250);
+                turn_off(mode_2_PORT[6], mode_2_PIN[6], mode_2_PORT[7], mode_2_PIN[7], mode_2_PORT[8], mode_2_PIN[8]);
+                // rožnutí a zhasnutí oranžové
+                turn_on(mode_2_PORT[3], mode_2_PIN[3], mode_2_PORT[4], mode_2_PIN[4], mode_2_PORT[5], mode_2_PIN[5]);
+                wait_for_any_miliseconds(1000);
+                turn_off(mode_2_PORT[3], mode_2_PIN[3], mode_2_PORT[4], mode_2_PIN[4], mode_2_PORT[5], mode_2_PIN[5]);
+                // zpět na červenou pro všechny semafory
+                for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
+                    LOW(all_red_ports[i], all_red_pins[i]);
+                }
+                wait_for_any_miliseconds(2000);
+                crossroad_mode = 3;
+            }
+            if(crossroad_mode == 3) {
+                if(crossing_request == 1) {
+                    crossing_activated();
+                    crossing_request = 0;
+                }
+                // zhasnutí červené na aktivních semaforech při tomto režimu
+                turn_off(mode_3_PORT[0], mode_3_PIN[0], mode_3_PORT[1], mode_3_PIN[1], mode_3_PORT[2], mode_3_PIN[2]);
+                // rožnutí a zhasnutí oranžové
+                turn_on(mode_3_PORT[3], mode_3_PIN[3], mode_3_PORT[4], mode_3_PIN[4], mode_3_PORT[5], mode_3_PIN[5]);
+                wait_for_any_miliseconds(1000);
+                turn_off(mode_3_PORT[3], mode_3_PIN[3], mode_3_PORT[4], mode_3_PIN[4], mode_3_PORT[5], mode_3_PIN[5]);
+                // rožnutí zelených LED - VOLNO v daných směrech
+                turn_on(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(6500);
+                // blikání LED před vypnutím
+                reverse(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(250);
+                reverse(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                wait_for_any_miliseconds(250);
+                turn_off(mode_3_PORT[6], mode_3_PIN[6], mode_3_PORT[7], mode_3_PIN[7], mode_3_PORT[8], mode_3_PIN[8]);
+                // rožnutí a zhasnutí oranžové
+                turn_on(mode_3_PORT[3], mode_3_PIN[3], mode_3_PORT[4], mode_3_PIN[4], mode_3_PORT[5], mode_3_PIN[5]);
+                wait_for_any_miliseconds(1000);
+                turn_off(mode_3_PORT[3], mode_3_PIN[3], mode_3_PORT[4], mode_3_PIN[4], mode_3_PORT[5], mode_3_PIN[5]);
+                // zpět na červenou pro všechny semafory
+                for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
+                    LOW(all_red_ports[i], all_red_pins[i]);
+                }
+                wait_for_any_miliseconds(2000);
+                crossroad_mode = 1;
             }
         }
     }
