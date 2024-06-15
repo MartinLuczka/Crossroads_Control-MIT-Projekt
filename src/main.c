@@ -94,6 +94,9 @@
 #define C_straight_red_PORT GPIOF
 #define C_straight_red_PIN  GPIO_PIN_4
 
+// definování globální proměnné, pokud je tato proměnná 1, tak chce někdo přejít na přechodu
+bool crossing_request = 0;
+
 void init(void)
 {
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);      // taktovani MCU na 16MHz
@@ -407,15 +410,15 @@ void crossing_activated(void) {
             }
     }
     show_number(numbers[10]); // zhasnutí 7segmentovky
+    // vypnutí zelené
+    HIGH(crossing_mode_PORT[2], crossing_mode_PIN[2]);
+    HIGH(crossing_mode_PORT[3], crossing_mode_PIN[3]);
     // zapnutí a vypnutí oranžové
     LOW(crossing_mode_PORT[0], crossing_mode_PIN[0]);
     LOW(crossing_mode_PORT[1], crossing_mode_PIN[1]);
     wait_for_any_seconds(1);
     HIGH(crossing_mode_PORT[0], crossing_mode_PIN[0]);
     HIGH(crossing_mode_PORT[1], crossing_mode_PIN[1]);
-    // vypnutí zelené
-    HIGH(crossing_mode_PORT[2], crossing_mode_PIN[2]);
-    HIGH(crossing_mode_PORT[3], crossing_mode_PIN[3]);
     // nastavení všeho zpět na červenou
     for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
         LOW(all_red_ports[i], all_red_pins[i]);
@@ -431,6 +434,8 @@ void wait_for_any_seconds(int16_t waiting_seconds) {
     int32_t switching_sound_time = 0;
     bool sound_on = 0;
     int32_t sound_time = 0;
+    bool stisk = 0;
+    int32_t time = 0;
     while(milis() < time_now + mili_seconds) {
         if(milis() - switching_sound_time > 667) {
             if(sound_on == 0) {
@@ -445,21 +450,34 @@ void wait_for_any_seconds(int16_t waiting_seconds) {
                 sound_time = milis();
                 REVERSE(speaker_PORT, speaker_PIN);
             }
+        if (milis() - time > 100) {
+            time = milis();
+            if (PUSH(button_PORT, button_PIN)) {
+                stisk = 1;
+            } else {
+                if (stisk == 1) {
+                    crossing_request = 1;
+                    stisk = 0;
+                }
+            }
+        }
     }
 }
-
+// funkce pro zapnutá 3 LED diod zaráz
 void turn_on(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3) {
     LOW(port1, pin1);
     LOW(port2, pin2);
     LOW(port3, pin3);
 }
 
+// funkce pro vypnutí 3 LED diod zaráz
 void turn_off(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3) {
     HIGH(port1, pin1);
     HIGH(port2, pin2);
     HIGH(port3, pin3);
 }
 
+// hlavní funkce main
 int main(void) {
     init();
 
@@ -467,7 +485,6 @@ int main(void) {
     bool stisk = 0;
     uint8_t crossroad_mode = 1;
     uint32_t crossroad_mode_time = 0;
-    bool crossing_request = 0;
     uint32_t sound_time = 0;
     bool sound_on = 0;
     uint32_t switching_sound_time = 0;
@@ -476,7 +493,6 @@ int main(void) {
         LOW(all_red_ports[i], all_red_pins[i]);
     }
     
-
     while (1) {
         if(milis() - switching_sound_time > 667) {
             if(sound_on == 0) {
@@ -506,6 +522,25 @@ int main(void) {
                     crossing_activated();
                     crossing_request = 0;
                 }
+                // zhasnutí červené na aktivních semaforech při tomto režimu
+                turn_off(mode_1_PORT[0], mode_1_PIN[0], mode_1_PORT[1], mode_1_PIN[1], mode_1_PORT[2], mode_1_PIN[2]);
+                // rožnutí a zhasnutí oranžové
+                turn_on(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
+                wait_for_any_seconds(1);
+                turn_off(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
+                // rožnutí zelených LED - VOLNO v daných směrech
+                turn_on(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                wait_for_any_seconds(8);
+                turn_off(mode_1_PORT[6], mode_1_PIN[6], mode_1_PORT[7], mode_1_PIN[7], mode_1_PORT[8], mode_1_PIN[8]);
+                // rožnutí a zhasnutí oranžové
+                turn_on(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
+                wait_for_any_seconds(1);
+                turn_off(mode_1_PORT[3], mode_1_PIN[3], mode_1_PORT[4], mode_1_PIN[4], mode_1_PORT[5], mode_1_PIN[5]);
+                // zpět na červenou pro všechny semafory
+                for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
+                    LOW(all_red_ports[i], all_red_pins[i]);
+                }
+                wait_for_any_seconds(2);
             }
         }
     }
