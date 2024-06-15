@@ -30,6 +30,28 @@ Nápady řešení některých věcí a znalosti jsem potom skrze celé studium a
 
 - **Světelné řízení křižovatky popřípadě doplňte o vlastní nápady a inovace.**
 
+## Vizualizace křižovatky
+
+Na celou křižovatku byste se měli dívat tady tímto způsobem. V **Malování** jsem si už ze začátku práce na projektu udělal takový návrh, podle kterého jsem se **orientoval při vytváření kódu**. Dále v dokumentaci tu mám i trochu **rozšířenou verzi**, ale tady zatím stačí pouze její původní verze.
+
+![Návrh projektu](Extern%C3%AD%20soubory%20ohledn%C4%9B%20projektu/N%C3%A1vrh%20projektu.png)
+
+V obrázku není zahrnut přechod pro chodce z pohledu periferií, protože mi při návrhu šlo hlavně o semafory řídicí provoz na silnici. Lépe řešeno mně zajímali jednotlivé směry a jízdní pruhy, které jsem si musel očíslovat/popsat tak, aby se mi s nimi dobře pracovalo.
+
 ## Schéma zapojení
 
 Schéma zapojení je vytvořeno v programu <a href="https://www.kicad.org/">**KiCad**</a>.
+
+![Elektrické schéma - HARDWARE](Obrázky%20a%20videa/Elektrické%20sch%C3%A9ma%20-%20HARDWARE.png)
+
+Pro detailnější zobrazení si otevřte PDF soubor [Model Křižovatky - Elektrické Schéma](Dokumentace/Model%20K%C5%99i%C5%BEovatky%20-%20Elektrick%C3%A9%20Sch%C3%A9ma%20-%20Projekt%20MIT.pdf).
+
+## Vývojový diagram
+
+## Popis činnosti programu
+
+Vytvoření algoritmu prošlo mnoha fázemi. Kolikrát jsem měl již něco vytvořené, ale narazil jsem vždy na něco, kvůli čemu by to bylo nešikovné, ale nakonec jsem se dostal k verzi, která funguje a řešení jednotlivých problémů mi přišlo dostatečně 
+
+## Zdrojový kód
+
+## Nápady vylepšení, dotazy, připomínky
