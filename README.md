@@ -50,7 +50,18 @@ Pro detailnější zobrazení si otevřte PDF soubor [Model Křižovatky - Elekt
 
 ## Popis činnosti programu
 
-Vytvoření algoritmu prošlo mnoha fázemi. Kolikrát jsem měl již něco vytvořené, ale narazil jsem vždy na něco, kvůli čemu by to bylo nešikovné, ale nakonec jsem se dostal k verzi, která funguje a řešení jednotlivých problémů mi přišlo dostatečně 
+**Vytvoření algoritmu prošlo mnoha fázemi**. Kolikrát jsem měl již něco vytvořené, ale narazil jsem vždy na něco, kvůli čemu by to bylo nešikovné, ale nakonec jsem se dostal k verzi, která **funguje a řešení jednotlivých problémů mi přišlo dostatečně vhodné**.
+
+Než začnu vysvětlovat činnost programu, tak bych Vám rád ukázal, jak jsem si rozdělil jednotlivé **pracovní cykly křižovatky**. **Barva** zde představuje **číslo režimu** (viz **legenda na levé straně**) a **směr**, který bude zrovna aktivní v tomto režimu. Všechny jiné semafory nepoužitých směrů budou nastavené do červené barvy.
+
+![Návrh projektu - režimy jízdy](Externí%20soubory%20ohledně%20projektu/Návrh%20projektu%20-%20režimy%20jízdy.png)
+
+
+Zde se taky můžete podívat, jak vypadá **finální výsledek na nepájivém poli**.
+
+![Obrázek projektu](Obrázky%20a%20videa/Obrázek%20projektu.jpg)
+
+
 
 ## Zdrojový kód
 

@@ -4,7 +4,8 @@
 #include "main.h"
 #include "milis.h"
 
-// Makra našich portů a pinů SMT8, děláme to proto, abychom věděli, k čemu zrovna přistupujeme, př. GPIOC, GPIO_PIN_6 nám asi nic moc neřekne
+// Makra našich portů a pinů SMT8, děláme to proto, abychom věděli, 
+//k čemu zrovna přistupujeme, př. GPIOC, GPIO_PIN_6 nám asi nic moc neřekne
 // Když ovšem máme speaker_PORT a speaker_PIN, tak hned vím, k jaké pariferii se daný PORT s PINEM vážou
 
 // segment A sedmisegmentu
@@ -324,7 +325,8 @@ const uint8_t numbers[] =
     0b11111111, // 7segmentová obrazovka je zhasnuta
 };
 
-// Funkce, do které si pošleme bitové slovo z pole numbers. V tomto slově si procházíme každý bit a podle jeho hodnoty buď, rozvítíme, nebo zhasneme segment
+// Funkce, do které si pošleme bitové slovo z pole numbers. V tomto slově si procházíme každý bit 
+// a podle jeho hodnoty buď, rozvítíme, nebo zhasneme segment
 void show_number(uint8_t number) {
     if (number & 1<<0) {
         HIGH(segment_a_PORT, segment_a_PIN);
@@ -422,7 +424,8 @@ void crossing_activated(void) {
             }
             crossing_sound_time = milis();
         }
-        // Generujeme zvuk o frekvenci 1000 Hz, podmínka se splní v případě, že je crossing_sound_on nastaveno do 1, logický součin AND
+        // Generujeme zvuk o frekvenci 1000 Hz, podmínka se splní v případě, že je crossing_sound_on nastaveno do 1, 
+        // logický součin AND
         if((milis() - sound_time > 1) && crossing_sound_on) {
                 sound_time = milis();
                 // Převracení stavu PINU, hardwarově spínáme tranzistor
@@ -452,7 +455,8 @@ void crossing_activated(void) {
     wait_for_any_miliseconds(2000);
 }
 
-// Funkce, do které si pošleme počet milisekund, které chceme počkat, zajišťuje správné fungování reproduktoru a detekci tlačítka
+// Funkce, do které si pošleme počet milisekund, které chceme počkat, 
+// zajišťuje správné fungování reproduktoru a detekci tlačítka
 void wait_for_any_miliseconds(int16_t waiting_miliseconds) {
     // Zjistíme si současný čas a uložíme do proměnné + ostatní potřebné proměnné
     int32_t time_now = milis();
@@ -461,9 +465,11 @@ void wait_for_any_miliseconds(int16_t waiting_miliseconds) {
     int32_t sound_time = 0;
     bool stisk = 0;
     int32_t time = 0;
-    // Dokud je současný čas menší než, čas při kterém jsme do funkce vstupovali + čas, který chce uživatel ve funkci strávit
+    // Dokud je současný čas menší než, čas při kterém jsme do funkce vstupovali + čas, 
+    // který chce uživatel ve funkci strávit
     while(milis() < time_now + waiting_miliseconds) {
-        // Vypináme a zapínáme každých 667 ms, odpovídá frekvenci 1,5 Hz, což je v podstatě reálná hodnota používaná v praxi
+        // Vypináme a zapínáme každých 667 ms, odpovídá frekvenci 1,5 Hz, 
+        // což je v podstatě reálná hodnota používaná v praxi
         if(milis() - switching_sound_time > 667) {
             if(sound_on == 0) {
                 sound_on = 1;
@@ -519,7 +525,8 @@ int main(void) {
     // Zavolání funkce, která nám inicializuje jednotlivé porty a piny + jejich počáteční hodnoty
     init();
 
-    // Deklarace potřebných proměnných, pokud nám proměnná nabývá pouze 2 hodnot - pravda/nepravda, tak ji nastavujeme datový typ bool
+    // Deklarace potřebných proměnných, pokud nám proměnná nabývá pouze 2 hodnot - pravda/nepravda, 
+    // tak ji nastavujeme datový typ bool
     uint32_t time = 0;
     bool stisk = 0;
     // Režim křižovatky počátečně nastavujeme do 1, respektive první režim
@@ -538,7 +545,8 @@ int main(void) {
     
     // Nekonečný cyklus, ve kterém nám náš program neustále běží po spuštění
     while (1) {
-        // Pokud nejsme ve funkci wait_for_any_miliseconds, tak musíme reproduktor ovládat a tlačítko zaznamenávat i ve funkci main
+        // Pokud nejsme ve funkci wait_for_any_miliseconds, 
+        // tak musíme reproduktor ovládat a tlačítko zaznamenávat i ve funkci main
         // Při stavu neaktivního přechodu pro chodce signál spínáme frekvencí 1,5 Hz
         if(milis() - switching_sound_time > 667) {
             if(sound_on == 0) {
