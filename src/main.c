@@ -1,11 +1,10 @@
 #include <stdbool.h>
 #include <stm8s.h>
-//#include <stdio.h>
 #include "main.h"
 #include "milis.h"
 
 // Makra našich portů a pinů SMT8, děláme to proto, abychom věděli, 
-//k čemu zrovna přistupujeme, př. GPIOC, GPIO_PIN_6 nám asi nic moc neřekne
+// k čemu zrovna přistupujeme, př. GPIOC, GPIO_PIN_6 nám asi nic moc neřekne
 // Když ovšem máme speaker_PORT a speaker_PIN, tak hned vím, k jaké pariferii se daný PORT s PINEM vážou
 
 // segment A sedmisegmentu
