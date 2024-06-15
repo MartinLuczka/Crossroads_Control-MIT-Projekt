@@ -3,7 +3,7 @@
 //#include <stdio.h>
 #include "main.h"
 #include "milis.h"
-#include "delay.h"
+//#include "delay.h"
 
 // makra rozdělit na porty a piny (abychom mohli posílat do funkcí, psát to řádek po řádku je MOR, hnus), tím pádem se bude měnit i ty makra v main.h, jak na to ve stažených souborech
 
@@ -289,6 +289,8 @@ const GPIO_TypeDef* crossing_mode_PORT[] = {
     C_straight_orange_PORT,
     A_straight_green_PORT,
     C_straight_green_PORT,
+    A_straight_red_PORT,
+    C_straight_red_PORT,
 };
 
 const GPIO_TypeDef* crossing_mode_PIN[] = {
@@ -296,6 +298,8 @@ const GPIO_TypeDef* crossing_mode_PIN[] = {
     C_straight_orange_PIN,
     A_straight_green_PIN,
     C_straight_green_PIN,
+    A_straight_red_PIN,
+    C_straight_red_PIN,
 };
 
 const uint8_t numbers[] =
@@ -359,20 +363,32 @@ void show_number(uint8_t number) {
 }
 
 void crossing_activated(void) {
-    HIGH(crossing_lights_red_PORT, crossing_lights_red_PIN);
-    LOW(crossing_lights_green_PORT, crossing_lights_green_PIN);
     uint8_t crossing_time_number = 8; // může se zde upravit
     uint32_t time = 0;
     uint32_t crossing_sound_time = 0;
     uint32_t crossing_sound_on = 0;
     uint32_t sound_time = 0;
+    // vypnutí červené na aktivních semaforech
+    HIGH(crossing_mode_PORT[4], crossing_mode_PIN[4]);
+    HIGH(crossing_mode_PORT[5], crossing_mode_PIN[5]);
+    // vypnutí a zapnutí oranžové
+    LOW(crossing_mode_PORT[0], crossing_mode_PIN[0]);
+    LOW(crossing_mode_PORT[1], crossing_mode_PIN[1]);
+    wait_for_any_seconds(1);
+    HIGH(crossing_mode_PORT[0], crossing_mode_PIN[0]);
+    HIGH(crossing_mode_PORT[1], crossing_mode_PIN[1]);
+    LOW(crossing_mode_PORT[2], crossing_mode_PIN[2]);
+    LOW(crossing_mode_PORT[3], crossing_mode_PIN[3]);
+    // přepnutí barev semaforu
+    HIGH(crossing_lights_red_PORT, crossing_lights_red_PIN);
+    LOW(crossing_lights_green_PORT, crossing_lights_green_PIN);
 
     while (crossing_time_number > 0) {
         if(milis() - time > 1000) {
             time = milis();
             show_number(numbers[crossing_time_number]);
             if (crossing_time_number == 1) {
-                delay_ms(1000);
+                wait_for_any_seconds(1);
             }
             crossing_time_number -= 1;
         }
@@ -385,14 +401,51 @@ void crossing_activated(void) {
             }
             crossing_sound_time = milis();
         }
-        if((milis() - sound_time > 1) & crossing_sound_on) {
+        if((milis() - sound_time > 1) && crossing_sound_on) {
                 sound_time = milis();
                 REVERSE(speaker_PORT, speaker_PIN);
             }
     }
     show_number(numbers[10]); // zhasnutí 7segmentovky
+    // zapnutí a vypnutí oranžové
+    LOW(crossing_mode_PORT[0], crossing_mode_PIN[0]);
+    LOW(crossing_mode_PORT[1], crossing_mode_PIN[1]);
+    wait_for_any_seconds(1);
+    HIGH(crossing_mode_PORT[0], crossing_mode_PIN[0]);
+    HIGH(crossing_mode_PORT[1], crossing_mode_PIN[1]);
+    // vypnutí zelené
+    HIGH(crossing_mode_PORT[2], crossing_mode_PIN[2]);
+    HIGH(crossing_mode_PORT[3], crossing_mode_PIN[3]);
+    // nastavení všeho zpět na červenou
+    for(uint16_t i = 0; i < sizeof(all_red_ports)/sizeof(all_red_ports[0]); i++) {
+        LOW(all_red_ports[i], all_red_pins[i]);
+    }
     LOW(crossing_lights_red_PORT, crossing_lights_red_PIN);
     HIGH(crossing_lights_green_PORT, crossing_lights_green_PIN);
+    wait_for_any_seconds(2);
+}
+
+void wait_for_any_seconds(int16_t waiting_seconds) {
+    int32_t mili_seconds = waiting_seconds * 1000;
+    int32_t time_now = milis();
+    int32_t switching_sound_time = 0;
+    bool sound_on = 0;
+    int32_t sound_time = 0;
+    while(milis() < time_now + mili_seconds) {
+        if(milis() - switching_sound_time > 667) {
+            if(sound_on == 0) {
+                sound_on = 1;
+            }
+            else{
+                sound_on = 0;
+            }
+            switching_sound_time = milis();
+        }
+        if((milis() - sound_time > 1) && sound_on) {
+                sound_time = milis();
+                REVERSE(speaker_PORT, speaker_PIN);
+            }
+    }
 }
 
 void turn_on(GPIO_TypeDef* port1, uint8_t pin1, GPIO_TypeDef* port2, uint8_t pin2, GPIO_TypeDef* port3, uint8_t pin3) {
@@ -434,7 +487,7 @@ int main(void) {
             }
             switching_sound_time = milis();
         }
-        if((milis() - sound_time > 1) & sound_on) {
+        if((milis() - sound_time > 1) && sound_on) {
                 sound_time = milis();
                 REVERSE(speaker_PORT, speaker_PIN);
             }

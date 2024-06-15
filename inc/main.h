@@ -38,5 +38,6 @@
 
 // functions
 void init(void);
+void wait_for_any_seconds(int16_t waiting_seconds);
 
 #endif // !_MAIN_H_
