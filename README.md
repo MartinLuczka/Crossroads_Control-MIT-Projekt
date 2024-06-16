@@ -61,9 +61,25 @@ Zde se taky můžete podívat, jak vypadá **finální výsledek na nepájivém 
 
 ![Obrázek projektu](Obrázky%20a%20videa/Obrázek%20projektu.jpg)
 
+Program funguje tak, že si nejdříve **nadefinujeme makra**, díky kterým se nám bude mnohe lépe **přistupovat k našim periferiím**. Tyto makra poté následně hned využíváme při **inicializaci jednotlivých pinů a portů**. Těmto pinům také **nastavujeme počáteční hodnotu** a jak je má **mikroprocesor** chápat / **jak s nimi má pracovat**.
+
+Dále zde máme **tvorbu polí**, do kterých si dáváme **piny a porty LED diod**, se kterými budeme pracovat v **určitých režimech**. Nebo také právě piny a jejich porty **určité skupiny**, se kterou potřebujeme pracovat. **Například včechny červené LED** --> Chceme **všechny semafory najednou nastavit do červené**.
+
+**Odlišné pole** od těch ostatních je pole ***numbers[]***, do kterého si ukládáme **binární slova**, tak aby každé slovo bylo schopné **zobrazit určitou číslici na 7segmentu**.
+
+
+
 
 ## Nápady vylepšení, dotazy, připomínky
 
+Tvorba tohoto programu mně **naučila spoustu nového**. Řekl bych, že nejvíce mi dala **práce s makry** a také **vytváření funkcí**, kvůli kterým se mi potom **lépe programovalo**. Díky tomu, že jsem spostu věcí měl právě ve funkcích, tak jsem neměl až tolik věcí ve 
+**funkci main()** a dobře se mi v ní tím pádem orientovalo a pracovalo.
+
+Další vylepšení bych viděl ve **vypracování fyzického modelu reálné křižovatky** a následného zakomponování mých komponent společně s hardwarem. Pokud bychom měli takovýto projekt, tak bychom také mohli mít v křižovatce nějaké **čidla přítomnosti vozidel** a podle jejich výstupu bychom křižovatku mohli **eventuelně zefektivnit**. (Řízení by se odvíjelo od **zaplněnosti jednotlivých příjezdových pruhů**.)
+
+Pokud by Vás něco zajímalo, na tvorbě byste se chtěli jakkoliv podílet, tak se mě nebojte kontaktovat na emailové adrese: ***luczka.martin@gmail.com***
+
+**Martin Luczka**
 
 ## Zdrojový kód
 
