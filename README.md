@@ -48,6 +48,12 @@ Pro detailnější zobrazení si otevřte PDF soubor [Model Křižovatky - Elekt
 
 ## Vývojový diagram
 
+Vývojový diagram jsem vytvořil v programu **Diagram Designer**.
+
+![Vývojový diagram](Dokumentace/Vývojový%20diagram.png)
+
+Pokud by Vás zajímalo více, tak se můžete podívat do složky [**Dokumentace**](Dokumentace/)
+
 ## Popis činnosti programu
 
 **Vytvoření algoritmu prošlo mnoha fázemi**. Kolikrát jsem měl již něco vytvořené, ale narazil jsem vždy na něco, kvůli čemu by to bylo nešikovné, ale nakonec jsem se dostal k verzi, která **funguje a řešení jednotlivých problémů mi přišlo dostatečně vhodné**.
