@@ -821,7 +821,7 @@ int main(void) {
 ```
 
 Tady se ještě můžete kouknout na používaná makra a funkce v **hlavičkovém souboru** 
-[**main.h**](inc/main.h)
+[**main.h**](inc/main.h).
 
 ```c
 #ifndef _MAIN_H_
