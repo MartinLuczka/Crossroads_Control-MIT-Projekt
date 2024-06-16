@@ -67,8 +67,24 @@ Dále zde máme **tvorbu polí**, do kterých si dáváme **piny a porty LED dio
 
 **Odlišné pole** od těch ostatních je pole ***numbers[]***, do kterého si ukládáme **binární slova**, tak aby každé slovo bylo schopné **zobrazit určitou číslici na 7segmentu**.
 
+Funkce ***show_numbers()*** nám právě na sedmisegment zobrazí takové číslo, které do této funkce **pošleme ve formě bajtového slova**.
 
+Funkci ***crossing_activated()*** voláme, pokud chceme obsloužit požadavek na vykonání aktivního přechodu. V této funkci **pracujeme s reproduktorem** (**vyšší frekvence kmitání** --> **zvuková signalizace** aktivního přechodu pro chodce.) Dále také především pracujeme se **zobrazováním zbývajícího času pro přechod na 7segmentu**. Nesmíme také zapomenout na to, že **proměnná, která zaznamenává požadavek na přechod pro chodce je globální** a můžeme ji právě přepisovat z každého místa programu.
 
+Požadavek na přechod pro chodce může být vykonán **kdykoliv** (až samozřejmě na stav aktivního přechodu) **skrze běh programu**. Požadavek uživatel vznese **zmáčnutím jednoho z tlačítek** (představuje 2 tlačítka --> na obou stranách přechodu).
+
+Funkce ***wait_for_any_miliseconds()*** nám **umožňuje počkat v určitém stavu křižovatky na námi zvolenou dobu v milisekundách**. Pro tyto účely **nemůžeme použít funkci delay()**, protože ta by v průběhu nic nedělala, my ovšem **potřebujeme pracovat s reprodokturem a také detekovat stisk tlačítka**. To vše nám zajišťuje tato funkce.
+
+Další 3 funkce jsou velice **jednoduché a plní docela podobný požadavek**. Jsou to funkce:
+***turn_on()***, ***turn_off()*** a ***reverse()***. Do těchto funkcích posíláme v podstatě 3 porty a 3 piny našich 3 LEDek, se kterými chceme zrovna pracovat. **První funkce nám všechny LEDky rozsvítí, další funkce je zhasne a třetí funkce převrátí jejich stav.**
+
+Další na řadě je funkce ***main()***, která se v podstatě **spustí hned po spuštění programu**. V této funkci hned na začátku **voláme funkci** ***init()***, ve které je dána **veškerá inicializace**. Dále zde **deklarujeme**, pro nás velice zásadní, **proměnné**. Poté už je zde jen **nekonečná smyčka**, ve které se **program v běhu neustále točí**.
+
+V tomto nekonečném cyklu opět řídíme reproduktor (mimo aktivní přechod pro chodce má mnohem nižší frekvenci - signál STOP) a detekujeme stisknutí tlačítka. Dále zde jen v podsatě střídáme 3 režimy celé křižovatky, které si liší tím, kdo má zelenou - signál GO.
+
+**Který režim se má zrovna vykonat / nebo se vykonává** snímáme v proměnné ***crossroad_mode***, kterou po dokončení daného režimu **vždy přepisujeme na následující** režim. Na konci toho posledního režimu ji opět přepíšeme na režim první. Na začátku těchto režimů **vždy kontrolujeme, jestli nebyl vznešen požadavek na přechodu pro chodce**. Pokud byl, tak ho **provedeme a požadavek přepíšeme do 0** (vynonali jsme ho). Jak již tedy jistě tušíte, tak **pokud někdo stiskne tlačítko**, že chce přejít, **tak se vykoná již rozdělaný režim a požadavek se vykoná před začátkem následujícího**.
+
+V jednotlivých režimech **zhasínáme a rožínáme LEDky podle námi vytvořeného systému**. Nejdříve **rožneme oranžovou**, kterou **následně vystřídá zelená**. Před koncem zelené začne **blikat (signalizace, že už bude končit)**, následně se **rozsvítí opět na sekundu oranžová**, která se **následně přepne na červenou**. Na červenou se přepnout všechny semafory, takto končí každý režim. I režim při vykonání přechodu pro chodce. **Na konci vždy červená zůstává 2 sekundy, poté už se vykonává následující režim**.
 
 ## Nápady vylepšení, dotazy, připomínky
 
