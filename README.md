@@ -38,6 +38,12 @@ Na celou křižovatku byste se měli dívat tady tímto způsobem. V **Malován�
 
 V obrázku není zahrnut přechod pro chodce z pohledu periferií, protože mi při návrhu šlo hlavně o semafory řídicí provoz na silnici. Lépe řešeno mně zajímali jednotlivé směry a jízdní pruhy, které jsem si musel očíslovat/popsat tak, aby se mi s nimi dobře pracovalo.
 
+## Blokové schéma
+
+Blokové schéma je vytvořeno v programu <a href="https://cs.wikipedia.org/wiki/Microsoft_Word">**Microsoft Word**</a>.
+
+![Blokové schéma](Dokumentace/Blokové%20schéma.png)
+
 ## Schéma zapojení
 
 Schéma zapojení je vytvořeno v programu <a href="https://www.kicad.org/">**KiCad**</a>.
@@ -92,14 +98,17 @@ V tomto nekonečném cyklu opět řídíme reproduktor (mimo aktivní přechod p
 
 V jednotlivých režimech **zhasínáme a rožínáme LEDky podle námi vytvořeného systému**. Nejdříve **rožneme oranžovou**, kterou **následně vystřídá zelená**. Před koncem zelené začne **blikat (signalizace, že už bude končit)**, následně se **rozsvítí opět na sekundu oranžová**, která se **následně přepne na červenou**. Na červenou se přepnout všechny semafory, takto končí každý režim. I režim při vykonání přechodu pro chodce. **Na konci vždy červená zůstává 2 sekundy, poté už se vykonává následující režim**.
 
-## Nápady vylepšení, dotazy, připomínky
+## Závěr
 
-Tvorba tohoto programu mně **naučila spoustu nového**. Řekl bych, že nejvíce mi dala **práce s makry** a také **vytváření funkcí**, kvůli kterým se mi potom **lépe programovalo**. Díky tomu, že jsem spostu věcí měl právě ve funkcích, tak jsem neměl až tolik věcí ve 
-**funkci main()** a dobře se mi v ní tím pádem orientovalo a pracovalo.
+V tomto projektu se mi podařilo realizovat všechny cíle, které jsem si před jeho zahájením stanovil. Periferie, zapojené k mikrokontroléru podle schématu, fungovaly správně a bylo možné je úspěšně řídit prostřednictvím vytvořeného programu. Při řešení jsem narazil na řadu technických problémů, avšak u všech se mi podařilo najít optimální řešení. Rád bych vyzdvihl zejména vytvořený program, který implementuje systém řízení křižovatky a dokáže efektivně reagovat na vstupy od uživatele.
 
-Další vylepšení bych viděl ve **vypracování fyzického modelu reálné křižovatky** a následného zakomponování mých komponent společně s hardwarem. Pokud bychom měli takovýto projekt, tak bychom také mohli mít v křižovatce nějaké **čidla přítomnosti vozidel** a podle jejich výstupu bychom křižovatku mohli **eventuelně zefektivnit**. (Řízení by se odvíjelo od **zaplněnosti jednotlivých příjezdových pruhů**.)
+Práce na tomto programu mi přinesla mnoho nových poznatků. Nejvíce jsem se naučil při práci s makry a při vytváření funkcí, které výrazně usnadnily a zpřehlednily další programování. Díky tomu, že jsem většinu příkazů zapouzdřil do funkcí, zůstala funkce main() přehledná a dobře organizovaná, což významně přispělo k systematickému přístupu k práci.
 
-Pokud by Vás něco zajímalo, na tvorbě byste se chtěli jakkoliv podílet, tak se mě nebojte kontaktovat na emailové adrese: ***luczka.martin@gmail.com***
+Do budoucna vidím prostor pro několik vylepšení. Jedním z nich by bylo vytvoření fyzického modelu reálné křižovatky, který by umožnil praktickou implementaci mých komponent společně s mikrokontrolérem. Dále by bylo možné celý projekt posunout na vyšší úroveň přidáním senzorů pro detekci přítomnosti vozidel. Tyto senzory by mohly poskytovat data o zaplněnosti jednotlivých příjezdových pruhů a na jejich základě by systém mohl optimalizovat řízení dopravy na křižovatce.
+
+## Kontakt
+
+Pokud by Vás něco zajímalo, chtěli byste se podílet na tvoření tohoto projektu, tak se mě nebojte kontaktovat na emailové adrese: ***luczka.martin@gmail.com***
 
 **Martin Luczka**
 
